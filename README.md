@@ -172,7 +172,7 @@ task-manager-api/
     ├── models/             # Database models
     └── routers/            # API endpoints
 ```
-## 📊 Entity Relationship Diagram
+## 📊 Entity Relationship Diagram Screenshot
 
 ![ERD](./screenshot/example-erd.png)
 
