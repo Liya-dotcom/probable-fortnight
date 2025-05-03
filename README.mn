@@ -2,7 +2,7 @@
 
 ## 📌 Project Overview
 
-![Screenshot](screenshot/examole.erdpng)
+![Screenshot](screenshot/examole.erd.png)
 
 
 A robust Task Manager API built with FastAPI and MySQL featuring complete CRUD operations across 4 relational tables.
@@ -169,7 +169,7 @@ curl -X POST "http://localhost:8000/tasks/1/categories/1"
 
 ## 📊 Entity Relationship Diagram
 
-![Screenshot](screenshot/examole.erdpng)
+![Screenshot](screenshot/examole.erd.png)
 
 ## 🧰 Project Structure
 
