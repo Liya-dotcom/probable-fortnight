@@ -1,8 +1,9 @@
-### Task Manager API with MySQL
+# Task Manager API with MySQL
 
 ## 📌 Project Overview
 
-![ERD Diagram](example-erd.png)
+![Screenshot](screenshot/examole.erdpng)
+
 
 A robust Task Manager API built with FastAPI and MySQL featuring complete CRUD operations across 4 relational tables.
 
@@ -168,7 +169,7 @@ curl -X POST "http://localhost:8000/tasks/1/categories/1"
 
 ## 📊 Entity Relationship Diagram
 
-![ERD Diagram](example-erd.png)
+![Screenshot](screenshot/examole.erdpng)
 
 ## 🧰 Project Structure
 
