@@ -1,0 +1,191 @@
+Here's the complete repository documentation in a single Markdown file:
+
+# Task Manager API with MySQL
+
+## 📌 Project Overview
+
+![ERD Diagram](https://i.imgur.com/example-erd.png)
+
+A robust Task Manager API built with FastAPI and MySQL featuring complete CRUD operations across 4 relational tables.
+
+## 🚀 Features
+
+- **User Management**
+  - Registration and profile management
+  - Secure authentication (password hashing)
+
+- **Task System**
+  - Create/read/update/delete tasks
+  - Status tracking (pending/in progress/completed)
+  - Priority levels (low/medium/high)
+  - Due dates
+
+- **Category Organization**
+  - Task categorization system
+  - Many-to-many relationships
+  - User-specific categories
+
+- **Database**
+  - MySQL relational database
+  - Connection pooling
+  - Proper ACID transactions
+
+## 🛠️ Technical Stack
+
+| Component       | Technology         |
+|----------------|-------------------|
+| Backend        | Python FastAPI    |
+| Database       | MySQL 8.0+        |
+| ORM            | MySQL Connector   |
+| Validation     | Pydantic         |
+| Documentation  | Swagger UI/Redoc |
+
+## 🗄️ Database Schema
+
+```sql
+-- Main tables
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE categories (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE tasks (
+    task_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    status ENUM('pending','in_progress','completed'),
+    priority ENUM('low','medium','high'),
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Junction table
+CREATE TABLE task_categories (
+    task_id INT NOT NULL,
+    category_id INT NOT NULL,
+    PRIMARY KEY (task_id, category_id),
+    FOREIGN KEY (task_id) REFERENCES tasks(task_id),
+    FOREIGN KEY (category_id) REFERENCES categories(category_id)
+);
+```
+
+## 🏗️ Setup Instructions
+
+### Prerequisites
+- Python 3.9+
+- MySQL Server 8.0+
+- pip package manager
+
+### 1. Clone Repository
+```bash
+git clone https://github.com/yourusername/task-manager-api.git
+cd task-manager-api
+```
+
+### 2. Set Up Virtual Environment
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+```
+
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Database Setup
+```bash
+mysql -u root -p < database/schema.sql
+```
+
+### 5. Configure Environment
+```bash
+cp .env.example .env
+```
+Edit `.env` with your credentials:
+```env
+DB_HOST=localhost
+DB_USER=your_username
+DB_PASSWORD=your_password
+DB_NAME=task_manager
+```
+
+### 6. Run the API
+```bash
+uvicorn src.main:app --reload
+```
+
+## 🌐 API Endpoints
+
+| Method | Endpoint                     | Description                  |
+|--------|------------------------------|------------------------------|
+| POST   | /users/                      | Create new user              |
+| GET    | /users/{user_id}             | Get user details             |
+| POST   | /categories/                 | Create new category          |
+| POST   | /tasks/                      | Create new task              |
+| GET    | /tasks/{task_id}             | Get task details             |
+| PUT    | /tasks/{task_id}             | Update task                  |
+| DELETE | /tasks/{task_id}             | Delete task                  |
+| POST   | /tasks/{task_id}/categories/ | Add category to task         |
+| GET    | /users/{user_id}/tasks       | Get all tasks for a user     |
+
+## 📋 Example Requests
+
+**Create User:**
+```bash
+curl -X POST "http://localhost:8000/users/" \
+-H "Content-Type: application/json" \
+-d '{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "secure123"
+}'
+```
+
+**Create Task:**
+```bash
+curl -X POST "http://localhost:8000/tasks/" \
+-H "Content-Type: application/json" \
+-d '{
+  "title": "Finish project",
+  "description": "Complete API implementation",
+  "user_id": 1,
+  "priority": "high"
+}'
+```
+
+**Add Category to Task:**
+```bash
+curl -X POST "http://localhost:8000/tasks/1/categories/1"
+```
+
+## 📊 Entity Relationship Diagram
+
+![ERD Diagram](https://i.imgur.com/example-erd.png)
+
+## 🧰 Project Structure
+
+```
+task-manager-api/
+├── .env
+├── .gitignore
+├── README.md
+├── database/
+│   ├── erd.png
+│   └── schema.sql
+├── requirements.txt
+└── src/
+    └── main.py
+```
+
+
+
