@@ -1,190 +1,180 @@
-# Task Manager API with MySQL
+```markdown
+# 📋 Task Manager API with MySQL
 
-## 📌 Project Overview
+## 🌟 Project Overview
 
-![Screenshot](screenshot/example-erd.png)
+A **production-ready** Task Manager API built with FastAPI and MySQL featuring complete CRUD operations across 4 relational tables with proper authentication and data relationships.
 
+---
 
-A robust Task Manager API built with FastAPI and MySQL featuring complete CRUD operations across 4 relational tables.
+## ✨ Key Features
 
-## 🚀 Features
+### 👥 User Management
+| Feature | Description |
+|---------|-------------|
+| 🔐 Registration | Secure user signup with email validation |
+| 🔒 Authentication | Password hashing with industry standards |
+| 👤 Profile Management | Update user details and preferences |
 
-- **User Management**
-  - Registration and profile management
-  - Secure authentication (password hashing)
+### ✅ Task System
+| Feature | Description |
+|---------|-------------|
+| 📝 CRUD Operations | Full create, read, update, delete functionality |
+| 🚦 Status Tracking | `pending` → `in_progress` → `completed` workflow |
+| ⚡ Priority Levels | `low`/`medium`/`high` priority classification |
+| 📅 Due Dates | Deadline management with calendar integration |
 
-- **Task System**
-  - Create/read/update/delete tasks
-  - Status tracking (pending/in progress/completed)
-  - Priority levels (low/medium/high)
-  - Due dates
+### 🗂️ Category Organization
+```diff
++ Many-to-many relationships between tasks and categories
++ User-specific category organization
++ Dynamic filtering by category
+```
 
-- **Category Organization**
-  - Task categorization system
-  - Many-to-many relationships
-  - User-specific categories
+---
 
-- **Database**
-  - MySQL relational database
-  - Connection pooling
-  - Proper ACID transactions
+## 🛠 Tech Stack
 
-## 🛠️ Technical Stack
+<div align="center">
 
-| Component       | Technology         |
-|----------------|-------------------|
-| Backend        | Python FastAPI    |
-| Database       | MySQL 8.0+        |
-| ORM            | MySQL Connector   |
-| Validation     | Pydantic         |
-| Documentation  | Swagger UI/Redoc |
+| Layer        | Technology                          |
+|--------------|-------------------------------------|
+| **Backend**  | Python FastAPI                      |
+| **Database** | MySQL 8.0+                          |
+| **ORM**      | MySQL Connector/Python              |
+| **Auth**     | JWT Tokens                          |
+| **Docs**     | Swagger UI & ReDoc                  |
 
-## 🗄️ Database Schema
+</div>
+
+---
+
+## 🗃 Database Schema
 
 ```sql
--- Main tables
+-- Users Table
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE categories (
-    category_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-
+-- Tasks Table
 CREATE TABLE tasks (
     task_id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
-    status ENUM('pending','in_progress','completed'),
-    priority ENUM('low','medium','high'),
+    status ENUM('pending','in_progress','completed') DEFAULT 'pending',
+    priority ENUM('low','medium','high') DEFAULT 'medium',
     user_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-
--- Junction table
-CREATE TABLE task_categories (
-    task_id INT NOT NULL,
-    category_id INT NOT NULL,
-    PRIMARY KEY (task_id, category_id),
-    FOREIGN KEY (task_id) REFERENCES tasks(task_id),
-    FOREIGN KEY (category_id) REFERENCES categories(category_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 ```
 
-## 🏗️ Setup Instructions
+[View Full Schema](#) | [Download SQL File](database/schema.sql)
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 - Python 3.9+
-- MySQL Server 8.0+
-- pip package manager
+- MySQL 8.0+
+- pipenv (recommended)
 
-### 1. Clone Repository
+### Installation
 ```bash
-git clone https://github.com/yourusername/task-manager-api.git
+# 1. Clone repository
+git clone https://github.com/Liya-dotcom/task-manager-api.git
 cd task-manager-api
-```
 
-### 2. Set Up Virtual Environment
-```bash
+# 2. Setup virtual environment
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
-```
+source venv/bin/activate  # Linux/MacOS
+.\venv\Scripts\activate   # Windows
 
-### 3. Install Dependencies
-```bash
+# 3. Install dependencies
 pip install -r requirements.txt
+
+# 4. Configure environment
+cp .env.example .env
+nano .env  # Edit with your credentials
 ```
 
-### 4. Database Setup
+### Database Setup
 ```bash
 mysql -u root -p < database/schema.sql
 ```
 
-### 5. Configure Environment
-```bash
-cp .env.example .env
-```
-Edit `.env` with your credentials:
-```env
-DB_HOST=localhost
-DB_USER=your_username
-DB_PASSWORD=your_password
-DB_NAME=task_manager
-```
-
-### 6. Run the API
+### Running the API
 ```bash
 uvicorn src.main:app --reload
 ```
+> Access docs at: http://localhost:8000/docs
 
-## 🌐 API Endpoints
+---
 
-| Method | Endpoint                     | Description                  |
-|--------|------------------------------|------------------------------|
-| POST   | /users/                      | Create new user              |
-| GET    | /users/{user_id}             | Get user details             |
-| POST   | /categories/                 | Create new category          |
-| POST   | /tasks/                      | Create new task              |
-| GET    | /tasks/{task_id}             | Get task details             |
-| PUT    | /tasks/{task_id}             | Update task                  |
-| DELETE | /tasks/{task_id}             | Delete task                  |
-| POST   | /tasks/{task_id}/categories/ | Add category to task         |
-| GET    | /users/{user_id}/tasks       | Get all tasks for a user     |
+## 📡 API Endpoints
 
-## 📋 Example Requests
+### Users
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/users` | Register new user |
+| `GET`  | `/users/{id}` | Get user profile |
 
-**Create User:**
+### Tasks
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/tasks` | Create new task |
+| `GET`  | `/tasks/{id}` | Get task details |
+| `PUT`  | `/tasks/{id}` | Update task |
+
+[View Complete API Reference](#)
+
+---
+
+## 💡 Example Usage
+
+### Create User
 ```bash
 curl -X POST "http://localhost:8000/users/" \
--H "Content-Type: application/json" \
--d '{
-  "username": "testuser",
-  "email": "test@example.com",
-  "password": "secure123"
-}'
+  -H "Content-Type: application/json" \
+  -d '{"username": "devuser", "email": "dev@example.com", "password": "S3cur3P@ss"}'
 ```
 
-**Create Task:**
-```bash
-curl -X POST "http://localhost:8000/tasks/" \
--H "Content-Type: application/json" \
--d '{
-  "title": "Finish project",
-  "description": "Complete API implementation",
-  "user_id": 1,
-  "priority": "high"
-}'
+### Create Task
+```javascript
+fetch('/tasks', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    title: 'Deploy API',
+    description: 'Deploy to production server',
+    priority: 'high'
+  })
+})
 ```
 
-**Add Category to Task:**
-```bash
-curl -X POST "http://localhost:8000/tasks/1/categories/1"
-```
+---
 
-## 📊 Entity Relationship Diagram
-
-![Screenshot](screenshot/example-erd.png)
-
-## 🧰 Project Structure
+## 🏗 Project Structure
 
 ```
 task-manager-api/
-├── .env
-├── .gitignore
-├── README.md
+├── .env                    # Environment variables
+├── requirements.txt        # Dependencies
 ├── database/
-│   ├── erd.png
-│   └── schema.sql
-├── requirements.txt
+│   ├── schema.sql          # Database schema
+│   └── erd.png             # ER diagram
 └── src/
-    └── main.py
+    ├── main.py             # FastAPI application
+    ├── models/             # Database models
+    └── routers/            # API endpoints
 ```
+## 📊 Entity Relationship Diagram
 
+![ERD](./screenshot/example-erd.png)
 
+```
 
