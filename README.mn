@@ -1,12 +1,5 @@
-Here's a beautifully formatted version of your README with improved visual hierarchy and styling:
-
 ```markdown
 # 📋 Task Manager API with MySQL
-
-<div align="center">
-  <img src="screenshot/example-erd.png" alt="ERD Diagram" width="600"/>
-  <p><em>Figure 1: Database Entity Relationship Diagram</em></p>
-</div>
 
 ## 🌟 Project Overview
 
@@ -93,7 +86,7 @@ CREATE TABLE tasks (
 ### Installation
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/task-manager-api.git
+git clone https://github.com/Liya-dotcom/task-manager-api.git
 cd task-manager-api
 
 # 2. Setup virtual environment
@@ -179,11 +172,9 @@ task-manager-api/
     ├── models/             # Database models
     └── routers/            # API endpoints
 ```
+## 📊 Entity Relationship Diagram
 
----
+![ERD](./screenshot/example-erd.png)
 
-<div align="center">
-  <img src="screenshot/api-docs.png" alt="API Documentation" width="800"/>
-  <p><em>Interactive API Documentation (Swagger UI)</em></p>
-</div>
+```
 
